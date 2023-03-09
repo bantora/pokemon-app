@@ -21,7 +21,7 @@ function App() {
   return (
     <div className="App">
       <input ref={ref} />
-      <img src={data.sprites.front_default} />
+      <img src={data?.sprites.front_default} />
       <button onClick={handleClick} >search pokemon</button>
     </div>
   )

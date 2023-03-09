@@ -13,9 +13,7 @@ const GenList = (): ReactElement => {
 
 	const genData = useGetByGenerationQuery(gen ?? '').data;
 
-	const pokeData = useGetPokemonByNameQuery(pokemon).data;
- 
-	console.log()
+	const pokeData = useGetPokemonByNameQuery(pokemon).data; 
 
 	const handleClick = (name:string): void => {
 		setPokemon(name)

@@ -6,7 +6,7 @@ import { useGetPokemonByNameQuery } from './api/poke-api';
 import { useGetPokemonSpritesQuery } from './api/poke-sprites';
 
 function App() {
-  const [count, setCount] = useState<string>('')
+  const [count, setCount] = useState<string>('1')
   const ref = useRef<HTMLInputElement>(null);
 
   const { data, isError, isLoading } = useGetPokemonByNameQuery(count);
@@ -16,7 +16,7 @@ function App() {
     setCount(ref.current!.value);
   }
 
-  console.log('poke api', data.sprites)
+  console.log('poke api', data)
 
   return (
     <div className="App">

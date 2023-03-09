@@ -1,30 +1,18 @@
-import { useState, useRef } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { Outlet } from 'react-router-dom';
+import './App.css';
+import NavBar from './components/nav-bar/Navbar';
+import type { ReactElement } from 'react';
 
-import { useGetPokemonByNameQuery } from './api/poke-api';
-import { useGetPokemonSpritesQuery } from './api/poke-sprites';
 
-function App() {
-  const [count, setCount] = useState<string>('1')
-  const ref = useRef<HTMLInputElement>(null);
-
-  const { data, isError, isLoading } = useGetPokemonByNameQuery(count);
-  const test = useGetPokemonSpritesQuery(count);
-
-  const handleClick = (): void => {
-    setCount(ref.current!.value);
-  }
-
-  console.log('poke api', data)
-
+const App = (): ReactElement => {
   return (
-    <div className="App">
-      <input ref={ref} />
-      <img src={data?.sprites.front_default} />
-      <button onClick={handleClick} >search pokemon</button>
+    <div className="App">  
+      <NavBar />
+      <div>
+        <Outlet />
+      </div>
     </div>
   )
 }
 
-export default App
+export default App;

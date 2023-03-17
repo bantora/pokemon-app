@@ -1,35 +1,69 @@
-import type { ReactElement } from 'react';
+import "./GenList.css";
 
-import { useState } from 'react';
+import type { ReactElement } from "react";
 
-import { useParams } from 'react-router-dom';
-import { useGetByGenerationQuery, useGetPokemonByNameQuery } from '../../api/poke-api';
-import { UrlTypes } from '../../global';
+import { random, isEqual } from "lodash";
+import { useState, useEffect, useRef } from "react";
+
+import { useParams } from "react-router-dom";
+import {
+  useGetByGenerationQuery,
+  useGetPokemonByNameQuery,
+} from "../../api/poke-api";
+import { UrlTypes } from "../../global";
 
 const GenList = (): ReactElement => {
-	const { gen } = useParams<keyof UrlTypes>();
+  const { gen } = useParams<keyof UrlTypes>();
 
-	const [pokemon, setPokemon] = useState<string>('');
+  const ref = useRef<HTMLInputElement>(null);
+  const [count, setCount] = useState<number>(0);
+  const [randPoke, setRandPoke] = useState<string>("");
+  const [hide, setHide] = useState<boolean>(true);
 
-	const genData = useGetByGenerationQuery(gen ?? '').data;
+  const pokemonByGeneration = useGetByGenerationQuery(gen ?? "").data;
 
-	const pokeData = useGetPokemonByNameQuery(pokemon).data; 
+  const getPokemon = useGetPokemonByNameQuery(randPoke).data;
 
-	const handleClick = (name:string): void => {
-		setPokemon(name)
-	}
+  const getRandomPokemon = (): string => {
+    return (
+      pokemonByGeneration?.pokemon_species[
+        random(pokemonByGeneration?.pokemon_species.length ?? 0)
+      ].name ?? ""
+    );
+  };
 
-	return (
-		<>
-			<div>
-				{genData?.pokemon_species.map((data, index) => { 
-						return <button key={index} onClick={() => handleClick(data.name)}>{data.name}</button>
-					})
-				}
-			</div>
-			<img src={pokeData?.sprites?.front_default} width={'50%'} height={'50%'}/>
-		</>
-	)
-}
+  const handleRandom = (): void => {
+    setHide(true);
+    setRandPoke(getRandomPokemon());
+  };
+
+  const handleSubmit = (): void => {
+    if (isEqual(randPoke, ref.current?.value)) {
+      window.alert("Correct!!!");
+      setHide(false);
+    }
+  };
+
+  useEffect(() => {
+    setCount(count + 1);
+  }, []);
+
+  return (
+    <>
+      <div className=''>
+        {count}
+        <h1>Guess that pokemon</h1>
+        <button onClick={handleRandom}>Get random pokemon</button>
+        <div className={`${hide && "silhouette"}`}>
+          <img
+            src={getPokemon?.sprites?.other["official-artwork"].front_default}
+          />
+        </div>
+        <input ref={ref} name='randInputGuess' />
+        <button onClick={handleSubmit}>Submit</button>
+      </div>
+    </>
+  );
+};
 
 export default GenList;

@@ -8,6 +8,7 @@ const App = (): ReactElement => {
   const { gen } = useParams();
   return (
     <div className="App">
+      <a href='https://www.reddit.com/'>test</a>
       <NavBar />
       <div>
         <Outlet />
